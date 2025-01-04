@@ -3,48 +3,51 @@ import { RichText } from "@/components/rich-text";
 import { DocsPage, DocsBody, DocsTitle } from "fumadocs-ui/page";
 import { notFound } from "next/navigation";
 import { basehub } from "basehub";
-import { draftMode } from "next/headers";
 import { TOCItemType } from "fumadocs-core/server";
+import { Pump } from "basehub/react-pump";
 
 export default async function Page(props: {
   params: Promise<{ slug: string }>;
 }) {
   const params = await props.params;
 
-  const { documentation } = await basehub({
-    draft: (await draftMode()).isEnabled,
-  }).query({
-    documentation: {
-      __args: {
-        filter: {
-          slug: {
-            eq: params.slug,
-          },
-        },
-        first: 1,
-      },
-      items: {
-        richText: {
-          json: {
-            content: true,
-            toc: true,
-          },
-        },
-        _title: true,
-      },
-    },
-  });
-
-  const page = documentation.items.at(0);
-  if (!page) notFound();
-
   return (
-    <DocsPage toc={page.richText ? parseToc(page.richText.json.toc[0]) : []}>
-      <DocsTitle>{page._title}</DocsTitle>
-      <DocsBody className="text-sm">
-        <RichText content={page.richText?.json.content} />
-      </DocsBody>
-    </DocsPage>
+    <Pump
+      queries={[
+        {
+          documentation: {
+            __args: { filter: { slug: { eq: params.slug } } },
+            item: {
+              richText: {
+                json: {
+                  content: true,
+                  toc: true,
+                },
+              },
+              _title: true,
+            },
+          },
+        },
+      ]}
+    >
+      {async ([{ documentation }]) => {
+        "use server";
+
+        const page = documentation.item;
+        if (!page) notFound();
+
+        return (
+          <DocsPage
+            toc={page.richText ? parseToc(page.richText.json.toc[0]) : []}
+          >
+            <DocsTitle>{page._title}</DocsTitle>
+            <DocsBody className="text-sm">
+              <RichText content={page.richText?.json.content} />
+            </DocsBody>
+          </DocsPage>
+        );
+      }}
+    </Pump>
   );
 }
 
@@ -128,9 +131,7 @@ export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;
 }) {
   const params = await props.params;
-  const { documentation } = await basehub({
-    draft: (await draftMode()).isEnabled,
-  }).query({
+  const { documentation } = await basehub().query({
     documentation: {
       __args: {
         filter: {
