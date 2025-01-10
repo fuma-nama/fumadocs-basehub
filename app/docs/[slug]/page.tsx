@@ -1,4 +1,4 @@
-import { Node } from "basehub/react-rich-text";
+import { RichTextNode, RichTextTocNode } from "basehub/api-transaction";
 import { RichText } from "@/components/rich-text";
 import { DocsPage, DocsBody, DocsTitle } from "fumadocs-ui/page";
 import { notFound } from "next/navigation";
@@ -51,32 +51,38 @@ export default async function Page(props: {
   );
 }
 
-function parseToc(list: Node): TOCItemType[] {
+function parseToc(list: RichTextTocNode): TOCItemType[] {
+  if (!list.content || !Array.isArray(list.content)) {
+    return [];
+  }
+
   const results: TOCItemType[] = [];
 
-  for (const item of list.content ?? []) {
+  for (const item of list.content) {
     if (item.type === "orderedList" || item.type === "listItem") {
       results.push(...parseToc(item));
       continue;
     }
 
-    if (!("content" in item) || !item.content) continue;
+    if (!item.content?.length) continue;
 
-    const nodes = findTextNode(item.content[0]);
+    const textNodes = findTextNode(item.content[0]);
 
-    for (const node of nodes) {
-      const mark = findLinkMark(node);
-      if (!mark) continue;
+    for (const node of textNodes) {
+      const linkInfo = findLinkMark(node);
+      if (!linkInfo) continue;
 
       results.push({
-        depth: mark.depth,
-        url: mark.href,
+        depth: 1,
+        url: linkInfo.href,
         title: (
           <RichText
-            content={[node]}
+            content={[node as RichTextNode]}
             // @ts-expect-error -- jsx
             components={{
-              a: (props) => <span {...props} />,
+              a: (props) => {
+                return <a {...props} />;
+              },
             }}
           />
         ),
@@ -87,7 +93,9 @@ function parseToc(list: Node): TOCItemType[] {
   return results;
 }
 
-function findTextNode(n: Node): Extract<Node, { type: "text" }>[] {
+function findTextNode(
+  n: RichTextTocNode
+): Extract<RichTextTocNode, { type: "text" }>[] {
   if (n.type === "text") {
     return [n];
   }
@@ -95,34 +103,21 @@ function findTextNode(n: Node): Extract<Node, { type: "text" }>[] {
   return n.content?.flatMap(findTextNode) ?? [];
 }
 
-function findLinkMark(n: Node):
-  | {
-      href: string;
-      depth: number;
-      target: string;
-    }
-  | undefined {
-  const prefix = "toc-link-h";
-
+function findLinkMark(
+  n: RichTextTocNode
+): { href: string; target?: string } | undefined {
   if (n.type === "text") {
     const mark = n.marks?.find((m) => m.type === "link");
 
-    if (mark)
+    if (mark?.attrs?.href) {
       return {
-        depth: Number(
-          mark.attrs.class
-            .split(" ")
-            .find((name) => name.startsWith(prefix))
-            ?.slice(prefix.length) ?? 1
-        ),
         href: mark.attrs.href,
-        target: mark.attrs.target,
       };
+    }
   }
 
   for (const c of n.content ?? []) {
     const result = findLinkMark(c);
-
     if (result) return result;
   }
 }
