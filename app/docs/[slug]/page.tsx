@@ -1,9 +1,9 @@
-import { RichTextNode, RichTextTocNode } from "basehub/api-transaction";
+import type { RichTextNode, RichTextTocNode } from "basehub/api-transaction";
 import { RichText } from "@/components/rich-text";
 import { DocsPage, DocsBody, DocsTitle } from "fumadocs-ui/page";
 import { notFound } from "next/navigation";
 import { basehub } from "basehub";
-import { TOCItemType } from "fumadocs-core/server";
+import type { TOCItemType } from "fumadocs-core/server";
 import { Pump } from "basehub/react-pump";
 
 export default async function Page(props: {
@@ -51,38 +51,33 @@ export default async function Page(props: {
   );
 }
 
-function parseToc(list: RichTextTocNode): TOCItemType[] {
-  if (!list.content || !Array.isArray(list.content)) {
-    return [];
-  }
-
+function parseToc(list: RichTextTocNode, level = 0): TOCItemType[] {
   const results: TOCItemType[] = [];
+  if (list.type === "text") return [];
 
-  for (const item of list.content) {
+  for (const item of list.content ?? []) {
     if (item.type === "orderedList" || item.type === "listItem") {
-      results.push(...parseToc(item));
+      results.push(...parseToc(item, level + 1));
       continue;
     }
 
-    if (!item.content?.length) continue;
+    if (item.type !== "paragraph" || !item.content) continue;
 
-    const textNodes = findTextNode(item.content[0]);
+    const nodes = findTextNode(item.content[0]);
 
-    for (const node of textNodes) {
-      const linkInfo = findLinkMark(node);
-      if (!linkInfo) continue;
+    for (const node of nodes) {
+      const mark = findLinkMark(node);
+      if (!mark) continue;
 
       results.push({
-        depth: 1,
-        url: linkInfo.href,
+        depth: level + 1,
+        url: mark.href,
         title: (
           <RichText
             content={[node as RichTextNode]}
             // @ts-expect-error -- jsx
             components={{
-              a: (props) => {
-                return <a {...props} />;
-              },
+              a: (props) => <span {...props} />,
             }}
           />
         ),
@@ -103,17 +98,21 @@ function findTextNode(
   return n.content?.flatMap(findTextNode) ?? [];
 }
 
-function findLinkMark(
-  n: RichTextTocNode
-): { href: string; target?: string } | undefined {
+function findLinkMark(n: RichTextTocNode):
+  | {
+      href: string;
+    }
+  | undefined {
   if (n.type === "text") {
     const mark = n.marks?.find((m) => m.type === "link");
 
-    if (mark?.attrs?.href) {
+    if (mark) {
       return {
         href: mark.attrs.href,
       };
     }
+
+    return;
   }
 
   for (const c of n.content ?? []) {
