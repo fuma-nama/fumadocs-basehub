@@ -11,9 +11,9 @@
     "basehub": "^8.0.2",
     "fumadocs-core": "14.7.2",
     "fumadocs-ui": "14.7.2",
-    "next": "15.5.7",
-    "react": "19.0.1",
-    "react-dom": "19.0.1"
+    "next": "15.5.8",
+    "react": "19.0.2",
+    "react-dom": "19.0.2"
   },
   "devDependencies": {
     "@types/node": "22.10.5",
