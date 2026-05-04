@@ -1,6 +1,6 @@
 "use client";
 import { Search } from "@/components/search";
-import { RootProvider } from "fumadocs-ui/provider";
+import { RootProvider } from "fumadocs-ui/provider/next";
 import { ReactNode, useMemo } from "react";
 
 export function Provider({
@@ -18,7 +18,7 @@ export function Provider({
             return <Search {...props} _searchKey={_searchKey} />;
           },
         }),
-        [_searchKey]
+        [_searchKey],
       )}
     >
       {children}

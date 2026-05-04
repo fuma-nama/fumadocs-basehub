@@ -29,3 +29,4 @@ next-env.d.ts
 
 # BaseHub
 .basehub
+basehub-types.d.ts

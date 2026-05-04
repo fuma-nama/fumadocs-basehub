@@ -2,7 +2,7 @@ import { DocsLayout } from "fumadocs-ui/layouts/docs";
 import type { ReactNode } from "react";
 import { baseOptions } from "@/app/layout.config";
 import { Pump } from "basehub/react-pump";
-import { PageTree } from "fumadocs-core/server";
+import type * as PageTree from "fumadocs-core/page-tree";
 
 export default async function Layout({ children }: { children: ReactNode }) {
   return (

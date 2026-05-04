@@ -3,26 +3,27 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "dotenv -e .env.local -- basehub dev & next dev",
+    "dev": "dotenv -c -- basehub dev & next dev",
     "build": "basehub && next build",
     "start": "next start"
   },
+  "type": "module",
   "dependencies": {
-    "basehub": "^8.0.2",
-    "fumadocs-core": "14.7.2",
-    "fumadocs-ui": "14.7.2",
-    "next": "15.5.8",
-    "react": "19.0.2",
-    "react-dom": "19.0.2"
+    "basehub": "^9.5.3",
+    "fumadocs-core": "16.8.7",
+    "fumadocs-ui": "16.8.7",
+    "next": "16.2.4",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
   },
   "devDependencies": {
-    "@types/node": "22.10.5",
-    "@types/react": "^19.0.4",
-    "@types/react-dom": "^19.0.2",
-    "autoprefixer": "^10.4.20",
-    "dotenv-cli": "^8.0.0",
-    "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.3"
+    "dotenv-cli": "^11.0.0",
+    "@tailwindcss/postcss": "^4.2.4",
+    "@types/node": "25.6.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "postcss": "^8.5.13",
+    "tailwindcss": "^4.2.4",
+    "typescript": "^6.0.3"
   }
 }

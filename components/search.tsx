@@ -1,9 +1,16 @@
 "use client";
 import { useSearch } from "basehub/react-search";
-import type { SortedResult } from "fumadocs-core/server";
+import type { ReactSortedResult } from "fumadocs-core/search";
 import {
-  SharedProps,
   SearchDialog,
+  SearchDialogClose,
+  SearchDialogContent,
+  SearchDialogHeader,
+  SearchDialogIcon,
+  SearchDialogInput,
+  SearchDialogList,
+  SearchDialogOverlay,
+  type SharedProps,
 } from "fumadocs-ui/components/dialog/search";
 import { useMemo } from "react";
 
@@ -17,10 +24,10 @@ export function Search({
   });
 
   const results = useMemo(() => {
-    if (!search.result || !search.result.found) return "empty";
+    if (!search.result || search.result.empty) return null;
 
     return search.result.hits.flatMap((hit) => {
-      const items: SortedResult[] = [];
+      const items: ReactSortedResult[] = [];
       const url = hit.document.slug ? `/docs/${hit.document.slug}` : "/docs";
 
       items.push({
@@ -37,7 +44,7 @@ export function Search({
               hit.document._title
             )}
           </span>
-        ) as unknown as string,
+        ),
         type: "page",
         url,
       });
@@ -54,7 +61,7 @@ export function Search({
                 __html: h.snippet as string,
               }}
             />
-          ) as unknown as string,
+          ),
           url,
         });
       }
@@ -65,11 +72,20 @@ export function Search({
 
   return (
     <SearchDialog
-      {...props}
-      onSearchChange={search.onQueryChange}
       search={search.query}
-      isLoading={search.query.length > 0 && search.result === undefined}
-      results={results}
-    />
+      onSearchChange={search.onQueryChange}
+      isLoading={search.result == null}
+      {...props}
+    >
+      <SearchDialogOverlay />
+      <SearchDialogContent>
+        <SearchDialogHeader>
+          <SearchDialogIcon />
+          <SearchDialogInput />
+          <SearchDialogClose />
+        </SearchDialogHeader>
+        <SearchDialogList items={results} />
+      </SearchDialogContent>
+    </SearchDialog>
   );
 }

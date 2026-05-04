@@ -20,13 +20,13 @@ function Logo() {
           width="22.7813"
           height="29.4375"
           rx="4.6875"
-          fill="var(--fd-background)"
+          fill="var(--color-fd-background)"
         ></rect>
         <rect
           width="44.6311"
           height="2.374"
           transform="matrix(0.707108 -0.707105 0.707108 0.707105 8.07422 37.1143)"
-          fill="hsl(var(--fd-primary))"
+          fill="var(--color-fd-primary)"
           fillOpacity="0.6"
         ></rect>
         <rect
@@ -34,56 +34,56 @@ function Logo() {
           width="44.6311"
           height="2.374"
           transform="matrix(0.707108 -0.707105 0.707108 0.707105 8.07422 33.7915)"
-          fill="hsl(var(--fd-primary))"
+          fill="var(--color-fd-primary)"
         ></rect>
         <rect
           opacity="0.4"
           width="44.6311"
           height="2.374"
           transform="matrix(0.707108 -0.707105 0.707108 0.707105 4.74902 33.7915)"
-          fill="hsl(var(--fd-primary))"
+          fill="var(--color-fd-primary)"
         ></rect>
         <rect
           opacity="0.35"
           width="44.6311"
           height="2.374"
           transform="matrix(0.707108 -0.707105 0.707108 0.707105 1.4248 33.7915)"
-          fill="hsl(var(--fd-primary))"
+          fill="var(--color-fd-primary)"
         ></rect>
         <rect
           opacity="0.3"
           width="44.6311"
           height="2.374"
           transform="matrix(0.707108 -0.707105 0.707108 0.707105 0.475586 31.417)"
-          fill="hsl(var(--fd-primary))"
+          fill="var(--color-fd-primary)"
         ></rect>
         <rect
           opacity="0.25"
           width="44.6311"
           height="2.374"
           transform="matrix(0.707108 -0.707105 0.707108 0.707105 0.000976562 28.5684)"
-          fill="hsl(var(--fd-primary))"
+          fill="var(--color-fd-primary)"
         ></rect>
         <rect
           opacity="0.2"
           width="44.6311"
           height="2.374"
           transform="matrix(0.707108 -0.707105 0.707108 0.707105 -1.42383 26.6689)"
-          fill="hsl(var(--fd-primary))"
+          fill="var(--color-fd-primary)"
         ></rect>
         <rect
           opacity="0.15"
           width="44.6311"
           height="2.374"
           transform="matrix(0.707108 -0.707105 0.707108 0.707105 -4.74707 26.6689)"
-          fill="hsl(var(--fd-primary))"
+          fill="var(--color-fd-primary)"
         ></rect>
         <rect
           opacity="0.1"
           width="44.6311"
           height="2.374"
           transform="matrix(0.707108 -0.707105 0.707108 0.707105 -8.07129 26.6689)"
-          fill="hsl(var(--fd-primary))"
+          fill="var(--color-fd-primary)"
         ></rect>
       </g>
       <rect
@@ -92,7 +92,7 @@ function Logo() {
         width="21.3569"
         height="28.0131"
         rx="3.9753"
-        stroke="hsl(var(--fd-primary))"
+        stroke="var(--color-fd-primary)"
         strokeWidth="1.4244"
       ></rect>
       <defs>

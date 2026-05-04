@@ -1,5 +1,5 @@
 import { RichText } from "@/components/rich-text";
-import { DocsPage, DocsBody, DocsTitle } from "fumadocs-ui/page";
+import { DocsPage, DocsBody, DocsTitle } from "fumadocs-ui/layouts/docs/page";
 import { notFound } from "next/navigation";
 import { basehub } from "basehub";
 import { Pump } from "basehub/react-pump";
